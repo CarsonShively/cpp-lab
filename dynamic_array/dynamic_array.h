@@ -164,4 +164,68 @@ allocate memory as a variable
 
 dynamic array of ints
 
+lp64 int = 4 bytes
+
+refer to first byte
+
+features
+int array
+
+how much to allocate
+
+when to allocate
+
+delete
+
+insert
+
+what does a 64 bit system mean?
+
+pointer == 1 address
+address = 8 bytes, 64 bits (lp64)
+
+design for 1 abi?
+
+think interms of machine code
 */
+
+// 2 files both include the header breaks the translation unit in the compiler
+// it is redefining the things in the header the second time its included
+// ifndef == if not defined
+#ifndef DYNAMIC_ARRAY_H // if this macro does not exists continue down, if it does exists skip to end if
+#define DYNAMIC_ARRAY_H // defined by the compiler? compiler has its own memory system/handling
+
+// a dynamic array is 1 object
+// struct defualts to public, class defaults to private
+class DynamicArray {
+// order of members corresponds to address order in memory
+// public vs private is normal encapsulation?
+private:
+    // pointer is 8 bytes
+    // compiler turns this into machine code that starts at this address and uses int offset to get the value
+    // this specifically holds the address of the first byte of int
+    // int tells the compiler how to create the machine code to offset from this address
+    // when the first array element is placed into memoery what is the address it starts at + type to offset
+    // address could be empty, purpose is to know what address it starts in memory + how the compiler should create the machine code to offset
+    // int becuase its a small sized project so long is not needed?
+    int* data;
+    int size; // track how many elements are in the array, size * 4 is the offset, sie is how many offsets to apply to the first address
+    int capacity; // element cap in ints (not addresses)
+
+public:
+    // compiler determines memory size for object based on class
+    // each filed has an offset from the starting address that maps to the fields of the object for alignment
+    DynamicArray(); // initialse empty with no params
+    ~DynamicArray(); // when the object's lifetime ends jump to this machine code
+    void push_back(int value); // standard name
+    void remove(int index);
+    int get(int index) const; // const = do not change member data, mostly getters but more conceptual
+    void set(int index, int value);
+    int get_capacity() const; 
+    int get_size() const; // how does const work with memory and convert to machine code?
+    void resize(int new_capacity); // keep the method focused on memory
+    void insert(int index, int value); // parameters as values are copies not the original values so they dont need const, if it is passed in by address it would 
+
+};
+
+#endif // skip to here (header gaurd ends here)
