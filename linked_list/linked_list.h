@@ -44,9 +44,12 @@ public:
     LinkedList();
     ~LinkedList();
     void insert(int index, char value);
-    /* void remove(int index); */
+    void remove(int index);
     char get(int index) const; // cant change members
     /* void replace(char value, int index); */
+    void show() const;
+    int get_size() const;
+    
 
 
 };

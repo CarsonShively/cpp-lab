@@ -1,7 +1,9 @@
 /**
  * how do compilers optimise memory?
  * 
- * c++ -> optimisation -> move lower
+ * low level c++ -> optimisation -> move lower then c++
+ * 
+ * learn concepts: overflow, sings, vector
  * 
  * look up concepts but implement them myself
  * 
@@ -14,6 +16,7 @@
  */
 
 #include "linked_list.h"
+#include <iostream>
 
 LinkedList::LinkedList() {
     size = 0;
@@ -49,8 +52,9 @@ void LinkedList::insert(int index, char value) {
         size++;
 
     } else if (index == 0) {
-        new_node->next = head->next;
-        head = new_node;
+        new_node->next = head; // a pointer to an object represents that object, head represents the first object
+        head = new_node; //change the object head represents to the object that new node represents
+        size++;
     } else {
         Node* current = head; // pointing to the same object as head
 
@@ -96,4 +100,61 @@ LinkedList::~LinkedList() {
         delete current;
         current = next;
     }
+}
+
+void LinkedList::remove(int index) {
+    if (index < 0 || index >= size) {
+        std::cout << "debug" << std::endl;
+        return;
+    }
+
+    if (index == 0) {
+        head = head->next;
+        size--;
+    } else if(index == size-1) {
+        Node* current = head;
+        //if index 0 is set outside the loop, <index gets 
+        for (int i=0; i<size-2; i++) {
+            current = current->next;
+        }
+        current = nullptr;
+        size--;
+
+    } else {
+        Node* current = head;
+        // checks condition at beginning, incrememnts at end
+        // runs once for each i that is less than condition
+        // count how many times it would run
+        // what is the last number it will run for
+        // flow = check condition -> body -> increment
+        // runs the number od times of <x
+        // would running it once put you at the first or second index
+        // get to an index <index
+        // get last size-1
+        // offset from index, index+-
+
+        // index 0 outside loop = size-1 == last, use this to get index
+        for (int i = 0; i<index-1; i++) {
+            current = current->next;
+        }
+        current->next = current->next->next;
+        size--;
+    }
+
+
+
+}
+
+void LinkedList::show() const {
+    Node* current = head;
+    for(int i=0; i<size; i++) {
+        std::cout << current->value; // when you accessing through a pointer, not accessing a pointer field
+        current = current->next;
+    }
+    std::cout << "\n";
+    // malloc == built in == hides lower levels == not what i want
+}
+
+int LinkedList::get_size() const {
+    return size;
 }
