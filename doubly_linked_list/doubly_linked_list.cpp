@@ -52,6 +52,7 @@ int DoublyLinkedList::get(int index) const {
 }
 
 void DoublyLinkedList::show() const {
+    std::cout << "show: ";
     Node* current = head;
     for (int i=0; i<size-1; i++) {
         std::cout << current->value << " ";
@@ -68,4 +69,61 @@ DoublyLinkedList::~DoublyLinkedList() {
         delete current;
         current = next;
     }
+}
+
+void DoublyLinkedList::show_reverse() const {
+    std::cout << "show reverse: ";
+    Node* current = head;
+    for (int i=0; i<size-1; i++) {
+        current = current->next;
+    }
+    for (int i=0; i<size-1; i++) {
+        std::cout << current->value << " ";
+        current = current->prev;
+    }
+    std::cout << current->value << "\n";
+}
+
+void DoublyLinkedList::remove(int index) {
+    if (size == 0 || index < 0 || index >= size) {
+        return;
+    } else if (index == 0) {
+        Node* del = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete del;
+        size--;
+    } else if (index == size-1) {
+        Node* current = head;
+        for (int i=0; i<size-2; i++) {
+            current = current->next;
+        }
+        delete current->next;
+        current->next = nullptr;
+        size--;
+    } else {
+        Node* current = head;
+        for (int i=0; i<index-1; i++) {
+            current = current->next;
+        }
+        Node* del = current->next;
+        current->next = current->next->next;
+        current->next->prev = current;
+        delete del;
+        size--;
+    }
+}
+
+void DoublyLinkedList::reverse() {
+    Node* current = head;
+    current->prev = current->next;
+    current->next = nullptr;
+    Node* tmp;
+    for (int i=0; i<size-1; i++) {
+        current = current->prev;
+        tmp = current->next;
+        current->next = current->prev;
+        current->prev = tmp;
+    }
+    head = current;
 }
